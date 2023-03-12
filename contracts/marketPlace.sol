@@ -27,7 +27,8 @@ contract NFTMarketplace is ReentrancyGuard {
 
     mapping(uint256 => MarketItem) private marketItems;
     
-        
+    MarketItem[] public marketItemsArr;
+
 
     /////////////////EVENT////////////////////////
     event MarketItemCreated(
@@ -76,6 +77,7 @@ contract NFTMarketplace is ReentrancyGuard {
         _m.price = _price;
         _m.sold = false;
 
+        marketItemsArr.push(_m);
         IERC721(_nftcontract).transferFrom(msg.sender, address(this), _tokenId);
 
         emit MarketItemCreated(
@@ -175,5 +177,11 @@ contract NFTMarketplace is ReentrancyGuard {
         }
 
         return items;
+    }
+
+
+    function fetchAllListedNfts() public view returns(MarketItem[] memory) {
+        
+        return marketItemsArr;
     }
 }
